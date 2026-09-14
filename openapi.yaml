@@ -1,0 +1,1052 @@
+openapi: 3.0.3
+info:
+  title: Selectum
+  version: 0.1.0
+  description: Enterprise AI services sourcing workbench scoring providers on Triple-A orchestration,
+    use-case depth, PoC graduation, and scale economics.
+  x-product-slug: ai-enterprise-selectum
+  x-source: ai-in-enterprise/hfs-blueprint-report-enterprise-artificial-intelligence-ai-services-2018/
+servers:
+- url: https://api.example.com
+tags:
+- name: Providers
+  description: Service provider catalog
+- name: Scoring
+  description: Blueprint dimensions
+- name: RFPs
+  description: Sourcing events
+- name: Engagements
+  description: Triple-A engagements
+- name: PoCs
+  description: PoC inventory
+- name: Ecosystems
+  description: Mega-ISV dependencies
+- name: Commercial
+  description: Scale commercial models
+- name: Governance
+  description: Evidence and audit
+paths:
+  /v1/providers:
+    get:
+      operationId: listProviders
+      tags:
+      - Providers
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Providers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeServiceProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+    post:
+      operationId: registerProvider
+      tags:
+      - Providers
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeServiceProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProviderCreate'
+  /v1/score-dimensions:
+    get:
+      operationId: listScoreDimensions
+      tags:
+      - Scoring
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Dimensions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeScoreDimension'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+  /v1/provider-scores:
+    post:
+      operationId: submitProviderScore
+      tags:
+      - Scoring
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: Score submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeProviderScore'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderScoreCreate'
+  /v1/rfps:
+    get:
+      operationId: listRfps
+      tags:
+      - RFPs
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: RFPs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeRfpEvent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+    post:
+      operationId: createRfp
+      tags:
+      - RFPs
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: RFP created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeRfpEvent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfpEventCreate'
+  /v1/rfps/{rfpId}:
+    parameters:
+    - name: rfpId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getRfp
+      tags:
+      - RFPs
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: RFP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeRfpEvent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/engagements:
+    get:
+      operationId: listEngagements
+      tags:
+      - Engagements
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Engagements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeEngagement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+    post:
+      operationId: createEngagement
+      tags:
+      - Engagements
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeEngagement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EngagementCreate'
+  /v1/pocs:
+    get:
+      operationId: listPocs
+      tags:
+      - PoCs
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: PoCs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopePocRecord'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      - name: status
+        in: query
+        schema:
+          type: string
+    post:
+      operationId: openPoc
+      tags:
+      - PoCs
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: PoC opened
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopePocRecord'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PocRecordCreate'
+  /v1/pocs/{pocId}/resolve:
+    parameters:
+    - name: pocId
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      operationId: resolvePoc
+      tags:
+      - PoCs
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: PoC resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopePocRecord'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PocGraduateRequest'
+  /v1/ecosystem-dependencies:
+    post:
+      operationId: addEcosystemDependency
+      tags:
+      - Ecosystems
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: Dependency added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeEcosystemDependency'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EcosystemDependencyCreate'
+  /v1/commercial-models:
+    post:
+      operationId: defineCommercialModel
+      tags:
+      - Commercial
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: Model defined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeCommercialModel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommercialModelCreate'
+  /v1/evidence-packs:
+    get:
+      operationId: listEvidencePacks
+      tags:
+      - Governance
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Evidence packs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeEvidencePack'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+    post:
+      operationId: issueEvidencePack
+      tags:
+      - Governance
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          description: Issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeEvidencePack'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvidencePackCreate'
+  /v1/governance/audit-entries:
+    get:
+      operationId: listAuditEntries
+      tags:
+      - Governance
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Audit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeAuditEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UnprocessableEntity:
+      description: Unprocessable entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    ResponseMeta:
+      type: object
+      required:
+      - requestId
+      - timestamp
+      properties:
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    Problem:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+    ServiceProvider:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        winnersCircle:
+          type: boolean
+    DataEnvelopeServiceProvider:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/ServiceProvider'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeServiceProvider:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/ServiceProvider'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ScoreDimension:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        weight:
+          type: number
+    DataEnvelopeScoreDimension:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/ScoreDimension'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeScoreDimension:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScoreDimension'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ProviderScore:
+      type: object
+      required:
+      - id
+      - providerId
+      - rfpId
+      - total
+      properties:
+        id:
+          type: string
+        providerId:
+          type: string
+        rfpId:
+          type: string
+        total:
+          type: number
+        dimensionScores:
+          type: object
+          additionalProperties:
+            type: number
+    DataEnvelopeProviderScore:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/ProviderScore'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeProviderScore:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProviderScore'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    RfpEvent:
+      type: object
+      required:
+      - id
+      - title
+      - status
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+          enum:
+          - draft
+          - open
+          - awarded
+          - cancelled
+    DataEnvelopeRfpEvent:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/RfpEvent'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeRfpEvent:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/RfpEvent'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    Engagement:
+      type: object
+      required:
+      - id
+      - providerId
+      - trifectaStart
+      properties:
+        id:
+          type: string
+        providerId:
+          type: string
+        rfpId:
+          type: string
+        trifectaStart:
+          type: string
+          enum:
+          - ai
+          - automation
+          - analytics
+        intent:
+          type: string
+          enum:
+          - bolt_on
+          - transformative
+        deliveryMode:
+          type: string
+          enum:
+          - industrialized
+          - project_centric
+    DataEnvelopeEngagement:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/Engagement'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeEngagement:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Engagement'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    PocRecord:
+      type: object
+      required:
+      - id
+      - engagementId
+      - status
+      properties:
+        id:
+          type: string
+        engagementId:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - graduated
+          - abandoned
+          - aged
+        conversationalExecutionComplete:
+          type: boolean
+        openedAt:
+          type: string
+          format: date
+    DataEnvelopePocRecord:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/PocRecord'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopePocRecord:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/PocRecord'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    EcosystemDependency:
+      type: object
+      required:
+      - id
+      - engagementId
+      - isv
+      properties:
+        id:
+          type: string
+        engagementId:
+          type: string
+        isv:
+          type: string
+          enum:
+          - microsoft
+          - google
+          - aws
+          - ibm
+          - other
+    DataEnvelopeEcosystemDependency:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/EcosystemDependency'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeEcosystemDependency:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/EcosystemDependency'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    CommercialModel:
+      type: object
+      required:
+      - id
+      - engagementId
+      properties:
+        id:
+          type: string
+        engagementId:
+          type: string
+        scaleEconomicsDefined:
+          type: boolean
+        costPerScaledUseCase:
+          type: number
+    DataEnvelopeCommercialModel:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/CommercialModel'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeCommercialModel:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/CommercialModel'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    EvidencePack:
+      type: object
+      required:
+      - id
+      - period
+      properties:
+        id:
+          type: string
+        period:
+          type: string
+        pocGraduationRate:
+          type: number
+    DataEnvelopeEvidencePack:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/EvidencePack'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeEvidencePack:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/EvidencePack'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    AuditEntry:
+      type: object
+      required:
+      - id
+      - eventType
+      - occurredAt
+      properties:
+        id:
+          type: string
+        eventType:
+          type: string
+        occurredAt:
+          type: string
+          format: date-time
+    DataEnvelopeAuditEntry:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/AuditEntry'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeAuditEntry:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/AuditEntry'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ServiceProviderCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        winnersCircle:
+          type: boolean
+    ProviderScoreCreate:
+      type: object
+      required:
+      - providerId
+      - rfpId
+      - total
+      properties:
+        providerId:
+          type: string
+        rfpId:
+          type: string
+        total:
+          type: number
+        dimensionScores:
+          type: object
+          additionalProperties:
+            type: number
+    RfpEventCreate:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+    EngagementCreate:
+      type: object
+      required:
+      - providerId
+      - trifectaStart
+      properties:
+        providerId:
+          type: string
+        rfpId:
+          type: string
+        trifectaStart:
+          type: string
+        intent:
+          type: string
+        deliveryMode:
+          type: string
+    PocRecordCreate:
+      type: object
+      required:
+      - engagementId
+      properties:
+        engagementId:
+          type: string
+        conversationalExecutionComplete:
+          type: boolean
+    EcosystemDependencyCreate:
+      type: object
+      required:
+      - engagementId
+      - isv
+      properties:
+        engagementId:
+          type: string
+        isv:
+          type: string
+    CommercialModelCreate:
+      type: object
+      required:
+      - engagementId
+      properties:
+        engagementId:
+          type: string
+        scaleEconomicsDefined:
+          type: boolean
+        costPerScaledUseCase:
+          type: number
+    EvidencePackCreate:
+      type: object
+      required:
+      - period
+      properties:
+        period:
+          type: string
+        pocGraduationRate:
+          type: number
+    PocGraduateRequest:
+      type: object
+      required:
+      - outcome
+      properties:
+        outcome:
+          type: string
+          enum:
+          - graduated
+          - abandoned
+        reason:
+          type: string
